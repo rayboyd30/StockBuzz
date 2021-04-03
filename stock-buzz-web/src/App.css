@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+}
+
+.App .header {
+  padding: 25px;
+  font-weight: bold;
+}
+
+.App .subtitle {
+  padding-bottom: 10px;
+}
