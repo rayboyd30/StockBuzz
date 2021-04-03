@@ -7,7 +7,7 @@ class App extends Component {
     return (
       <div className="App container">
         <header className="header">Welcome to Stock Buzz!</header>
-        <div class="subtitle">
+        <div className="subtitle">
           Stock Buzz gives you insight into what the internet is saying about your favorite stock or crypto currency.
         </div>
         <SearchBar />

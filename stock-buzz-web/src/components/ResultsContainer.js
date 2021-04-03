@@ -5,7 +5,7 @@ class ResultsContainer extends Component {
     render() {
         return (
             <div>
-                {this.props.results.map(result => <Result key={result.name} item={result} />)} 
+                {this.props.results.map(result => <Result key={`${result.name}-${result.ticker}`} item={result} />)} 
             </div>
         )
     }

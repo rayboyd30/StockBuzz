@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import ResultsContainer from "./ResultsContainer"
 import "./SearchBar.css"
+import axios from "axios"
 
 class SearchBar extends Component {
-  BarStyling = {width:"100%", background:"#F2F1F9", border:"1px solid grey", borderRadius:"5px", padding:"0.5rem"};
   state = {
-      assets: [
-        {name: "Apple", ticker: "AAPL"},
-        {name: "Microsoft", ticker: "MSFT"},
-        {name: "Tesla", ticker: "TSLA"},
-        {name: "Alphabet Inc.", ticker: "GOOG"}
-      ],
+      assets: [],
       searchTerm: ""
   }
+
   editSearchTerm = (event) => {
     this.setState({searchTerm: event.target.value})
+    this.search()
   }
 
-  search = () => {
+  search () {
     let result = [];
-    if (this.state.searchTerm && this.state.searchTerm !== '') {
-      result = this.state.assets.filter(asset => asset.name.toLowerCase().includes(this.state.searchTerm.toLowerCase()) || asset.ticker.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
-    }
-    return result;
+      if (this.state.searchTerm && this.state.searchTerm !== '' && this.state.searchTerm.length > 2) {
+        axios.get(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${this.state.searchTerm}&apikey=<ApiKey>`).then(res => {
+          if (res.data && res.data.bestMatches) {
+            result = res.data.bestMatches.map(item => ({
+              ticker: item["1. symbol"],
+              name: item["2. name"]
+            }));
+            this.setState({assets: result})
+          }
+        })
+      }
+      this.setState({assets: []})
   }
 
   render (){
@@ -35,7 +40,7 @@ class SearchBar extends Component {
         placeholder={"search for a stock or crypto currency"}
         onChange={this.editSearchTerm}
         />
-        <ResultsContainer results={this.search()}/>
+        <ResultsContainer results={this.state.assets}/>
     </div>
     )
   }
